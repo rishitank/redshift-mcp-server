@@ -35,7 +35,7 @@ docker build -t redshift-mcp .
 ```
 In Augment Code, Add a new MCP mentioning Redshift in the name and add the following replacing the variables accordingly:
 ```
-docker run -e DATABASE_URL="redshift://USERNAME:PASSWORD@HOSTNAME:5439/DBNAME" -i --rm --name redshift-mcp redshift-mcp
+docker run -e DATABASE_URL="redshift://USERNAME:PASSWORD@HOSTNAME:5439/DBNAME" -i --rm redshift-mcp
 ```
 
 #### Cursor IDE
