@@ -28,6 +28,16 @@ For using across all projects, create `~/.cursor/mcp.json` in your home director
 
 ### Client-Specific Setup
 
+#### Augment Code
+Run the following command to build the Docker image
+```
+docker build -t redshift-mcp .
+```
+In Augment Code, Add a new MCP mentioning Redshift in the name and add the following replacing the variables accordingly:
+```
+docker run -e DATABASE_URL="redshift://USERNAME:PASSWORD@HOSTNAME:5439/DBNAME" -i --rm --name redshift-mcp redshift-mcp
+```
+
 #### Cursor IDE
 
 1. The server will be automatically detected if configured in `mcp.json`
