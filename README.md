@@ -2,6 +2,8 @@
 
 This is a Model Context Protocol (MCP) server for Amazon Redshift implemented in TypeScript. It follows Anthropic's implementation pattern and provides Cursor IDE and other MCP-compatible clients with rich contextual information about your Redshift data warehouse. This server enables LLMs to inspect database schemas and execute read-only queries.
 
+This is an unofficial Redshift MCP server and can be used while waiting for Amazon to build their own: https://github.com/awslabs/mcp/issues/132.
+
 ## Integration with MCP Clients
 
 ### Project-Specific Configuration
