@@ -1,0 +1,126 @@
+# .augment-guidelines
+
+**Role:** Senior Full-Stack Developer
+
+**Tech Stack:**
+
+- Read the package.json file for all dependencies
+
+**Guidelines:**
+
+- At the start of each session, read the .augment-memories file at the root of the repository to ensure alignment with the user's preferences.
+- **Modularise:** Break code into functions and components.
+- **Filenames:** Use kebab-case (e.g., my-component.tsx).
+- **Logic:** Use early returns, error handling, and logging for async operations.
+- **Naming:** Clear, descriptive names; event handlers prefixed with "handle".
+- **Accessibility:** Ensure aria-labels, tabindex, and keyboard navigation.
+- **Imports:** Complete at the top using @ alias.
+- **Comments:** Retain any "TODO" notes.
+- **Quality:** Write bug-free, secure, maintainable, scalable code with concise comments. Admit uncertainty if unsure.
+
+## General Coding Guidelines
+- Adhere to the folder structure and import rules defined in the client/rules/ directory using eslint-plugin-project-structure.
+  - This includes folder-structure.json for folder structure rules and independent-modules.json for import rules.
+- When running terminal commands always do source ~/.zshrc
+- When trying to login to the app after running it, you can use Google SSO and sign in with the email address ending in @adthena.com.
+- Clean up dead code / temporary code as you go along, if you are trying something new which makes an old approach redundant, clean it up to avoid littering the codebase.
+- Always fix ESLint and Stylelint issues as you go along (there should be npm scripts for these already). In the IDE some of these are auto-fixable by manually saving the file with CMD + S.
+  - Always follow the ESLint rules defined in the project's eslint.config.js file.
+  - Always follow the Stylelint rules defined in the project's stylelint.config.js file.
+- Any interactive elements should have a data-pendo-id attribute and a data-testid attribute which will be useful for tests, follow the conventions of using constants in the appropriate folder structure to avoid hard-coded strings.
+- API calls are typically done with the useFetch hook.
+- Remove unused code.
+- Never access a nested file of another shared entity like shared components, pages, etc. If a component from another module is needed, it should be extracted to its own component or moved to a common/shared location.
+- Hooks should always have a .tsx extension, not .ts.
+- Ensure compliance with the coding standards outlined in the .coderabbit.yml file.
+- Avoid inline styling of components, prefer using styled-components.
+- Avoid using useTheme and providing colours as props, instead rely on Styled Component's Theme context.
+- For state handling, use a nested component composition pattern where each component handles one state concern. For example, design components like `LoadingState` and `ErrorState` that either render their UI or pass through children, then use them as `<LoadingState isLoading={isLoading}><ErrorState hasError={hasError}>{content}</ErrorState></LoadingState>`. This pattern promotes better separation of concerns, testability, and composability compared to using if/else or switch statements in a single component.
+- Follow SOLID principles, DRY, separation of concerns and proper code isolation.
+- Going forward, use JS default parameters for React components as well as the defaultProps, we will migrate these later. Avoid using || in favour of defaultProps and parameters.
+- For buttons, we use a css helper to compose buttons such as PrimaryButtonColour or PlainButtonColour etc (use one that is appropriate to the design).
+- Do not use Font Awesome icons, instead use the svg icons that we have.
+- Do not use any deprecated code.
+- add prop types to styled components that are not part of the theme context.
+- Avoid using components, hooks, constants or other code that do not exist.
+- Only create / move components as a shared component if it is used by more than one other shared thing e.g. shared components, hooks, pages etc.
+
+## Testing Guidelines
+- Remember to avoid testing implementation details of the UI such as toBeInDocument and other jest-dom functions (unless there is no alternative) and instead rely on UI snapshots. You should also verify the snapshots to make sure that the elements you expect are in the snapshot for that specific test.
+- Do not use __esModule if you only need to mock the default export.
+- Wrap the callback of jest.mock with jest.fn
+- Prefer userEvent for interaction testing.
+- Use a function to wrap render functions in tests.
+- Avoid prop spreading in tests and prefer individual props with default values where necessary.
+- Avoid mocking descendants of the component under test.
+
+## Specific Guidelines
+- If a code suggestion conflicts with ESLint or Stylelint rules, prioritize the rules from those tools.
+- When generating imports, respect the defined import order and organization as per the project's configurations.
+- Avoid suggesting code that would lead to violations of formatting rules established in the project's configuration files.
+- Always run eslint --fix (using the available npm command) after implementing a change and fix any remaining errors.
+- Always run stylelint --fix (using the available npm command) after implementing a change on a styled component and fix any remaining errors.
+- Be patient when running linting commands or git commit commands due to pre-commit hooks needed to be run.
+
+## MCP Server Guidelines
+These guides explain how each MCP server works, when to use it, and the benefits it provides. You don’t need to request these servers manually; they are automatically engaged when appropriate.
+By default, the Coding Agent should always use the following when available: Sequential Thinking MCP Server, memory bank, neo4j redshift-mcp-server memory, Task Manager and Software Planning MCP Servers together, and Context7 for every prompt.
+
+### Sequential Thinking MCP Server
+
+What It Does: Helps me solve complex problems by guiding me through a step-by-step thought process, ensuring I don’t rush to conclusions.
+When I Use It: Automatically engaged when:
+You ask a complex question requiring careful reasoning.
+A problem needs to be broken into smaller, manageable steps.
+I’m planning a solution or strategy.
+I need to revisit or adjust my approach as new details emerge.
+
+Do You Need to Ask for It?: No, I’ll use it whenever it’s appropriate.
+Benefits for You:
+Better Answers: More accurate and thoroughly considered responses.
+Transparency: You can follow my reasoning process step-by-step.
+Flexibility: I can adapt my thinking if I start down the wrong path.
+Organization: Complex ideas are broken down into clear, digestible parts.
+
+### Task Management and Software Planning with docs/TASK_LIST.md
+
+What It Does: Tracks all project tasks, sub-tasks, status, dependencies, and completions in a markdown file located at docs/TASK_LIST.md. This file serves as the central task management system for the Coding Agent.
+When I Use It: Automatically engaged when:
+You assign a task or request task tracking for a project.
+I need to update the status of tasks or sub-tasks.
+I need to verify dependencies before starting a task.
+I need to log task completions.
+
+Do You Need to Ask for It?: No, I’ll use docs/TASK_LIST.md for all task management activities.
+Benefits for You:
+Transparency: All tasks and their statuses are clearly documented in a single, version-controlled file.
+Organization: Tasks, sub-tasks, and dependencies are structured in a table for easy tracking.
+Autonomy: I can manage tasks independently, minimizing interruptions.
+Version Control: Changes to TASK_LIST.md are tracked in the repository, ensuring consistency.
+
+Think of It Like: A shared project board where I update tasks and progress, visible to the entire team.
+Instructions for Use:
+The docs/TASK_LIST.md file exists in the repository’s docs directory.
+
+The file includes instructions at the top for how I should manage tasks, followed by a table with columns for Task, Sub-Tasks, Status, Dependencies, and Completion Date.
+I’ll read the instructions to add new tasks, update statuses (Not Started, In Progress, Completed), check dependencies, and log completions with dates.
+I’ll commit changes to TASK_LIST.md to the repository to maintain version history.
+
+### Context7 MCP Server
+
+What It Does: Fetches up-to-date documentation and code examples for libraries and frameworks, ensuring code is accurate and current.
+
+When I Use It: Automatically engaged when:
+You ask for documentation on a specific library or framework.
+
+Do You Need to Ask for It?: No, I’ll use it whenever relevant documentation is required.
+
+Benefits for You:
+
+Accuracy: Code is based on the latest, version-specific documentation.
+Efficiency: Reduces time spent searching for documentation manually.
+Reliability: Avoids errors from outdated or hallucinated APIs.
+
+Think of It Like: A librarian who always has the most recent manuals and guides at hand.
+
+Think of It Like: Watching me solve a puzzle aloud—you see how I piece it together, leading to more reliable answers.
