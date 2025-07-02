@@ -63,7 +63,7 @@ if (!databaseUrl) {
 
 // Create resource URL without sensitive info
 const resourceBaseUrl = new URL(databaseUrl);
-console.log(resourceBaseUrl);
+console.warn(resourceBaseUrl);
 const sslEnabled = resourceBaseUrl.searchParams.get("ssl") === "true";
 
 const pool = new pg.Pool({
