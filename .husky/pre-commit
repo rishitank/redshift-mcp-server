@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+
+# Run lint-staged for code quality (using TypeScript config)
+npm run lint:staged
