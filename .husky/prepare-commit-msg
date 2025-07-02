@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+
+# Prepare commit message with JIRA ticket integration
+npx jira-prepare-commit-msg "$1"

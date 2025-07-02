@@ -1,0 +1,50 @@
+version: "3.8"
+
+services:
+  # PostgreSQL container to mock Redshift
+  test-postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: test_redshift
+      POSTGRES_USER: test_user
+      POSTGRES_PASSWORD: test_password
+      POSTGRES_INITDB_ARGS: "--auth-host=scram-sha-256"
+    ports:
+      - "5433:5432"
+    volumes:
+      - ./tests/fixtures/init-test-db.sql:/docker-entrypoint-initdb.d/01-init.sql
+      - ./tests/fixtures/mock-redshift-schema.sql:/docker-entrypoint-initdb.d/02-schema.sql
+      - ./tests/fixtures/test-data.sql:/docker-entrypoint-initdb.d/03-data.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U test_user -d test_redshift"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - test-network
+
+  # Test runner container
+  test-runner:
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    environment:
+      DATABASE_URL: "postgresql://test_user:test_password@test-postgres:5432/test_redshift?ssl=false"
+      NODE_ENV: test
+    depends_on:
+      test-postgres:
+        condition: service_healthy
+    volumes:
+      - .:/app
+      - /app/node_modules
+    working_dir: /app
+    command: npm test
+    networks:
+      - test-network
+
+networks:
+  test-network:
+    driver: bridge
+
+volumes:
+  postgres_test_data:
